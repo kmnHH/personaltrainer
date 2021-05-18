@@ -83,7 +83,7 @@ function ShowInfo(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
-                        Cancel
+                        Back
                     </Button>
                 </DialogActions>
             </Dialog>

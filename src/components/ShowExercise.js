@@ -22,7 +22,8 @@ function ShowExercise(props) {
       duration: props.exercise.duration,
       activity: props.exercise.activity,
     });
-    setOpen(true);
+    setOpen(true); 
+
   }; 
 
   const handleClose = () => {
@@ -35,7 +36,10 @@ function ShowExercise(props) {
                 <DirectionsRunRoundedIcon/>
             </IconButton>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Exercise summary</DialogTitle>
+                <DialogTitle id="form-dialog-title"> 
+                's Exercise summary</DialogTitle> 
+                {//{props.exercise.customer.firstname}} 
+                }
                 <DialogContent>
                 <TextField
                         margin="dense"
@@ -54,7 +58,7 @@ function ShowExercise(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
-                        Cancel
+                        Back
                     </Button>
                 </DialogActions>
             </Dialog>
