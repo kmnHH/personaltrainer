@@ -24,7 +24,6 @@ function Customers() {
 
     useEffect(() => { 
         fetchCustomers();  
-        /*fetchTrainings();*/
      }, []);   
 
      useEffect(() => { 
@@ -81,7 +80,6 @@ function Customers() {
             width: 80, 
             cellRendererFramework: params => <EditCustomer editCustomer={editCustomer} customer={params.data} />
         }, 
-        
       ]    
 
       const editCustomer = (customer, href) => {
@@ -96,9 +94,7 @@ function Customers() {
       };
 
       const deleteCustomer = (params) => { 
-        console.log(params);
         if (window.confirm('The decision is final if you delete. Do you want to continue?')) 
-        //console.log(url);
         {
             fetch(params, { method: 'DELETE' })
             .then(response => {
@@ -137,7 +133,6 @@ function Customers() {
           headers: { 'Content-type' : 'application/json' } 
         })  
         .then(_ => fetchCustomers()) 
-        .then(_ => <ShowTrainings useEffect={useEffect}/>) 
         .catch(err => console.error(err))
       }  
 

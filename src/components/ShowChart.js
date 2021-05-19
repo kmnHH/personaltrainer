@@ -1,100 +1,62 @@
-import React, { useState, useEffect } from 'react';   
+import React, { useState } from 'react';   
 import Chart from "react-google-charts";
 import IconButton from '@material-ui/core/IconButton';  
 import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';  
 import Dialog from '@material-ui/core/Dialog';  
 import Button from '@material-ui/core/Button'; 
-import _ from "lodash"; 
-import groupBy from "lodash";  
-import sumBy from "lodash";
-
-
-
-const ShowChart = (props) => {
+import _ from "lodash";
+ 
+const ShowChart = ({ trainings }) => {
     const [open, setOpen] = useState(false);  
-    const [trainings, setTraining] = useState([]);
-    const [group, setGroup] = useState([]); 
-    const [results, setResult] = useState([]);  
-    const chartMockData = [  
-        ['Activity', 'Minutes'], 
-        //[results[0].activity, 10], 
-        ["Spinning", 10],  
-        ["Running", 20], 
-        
-    ];
-
-    useEffect(() => { 
-        fetchTrainings();  
-     }, []);  
-    
-     const fetchTrainings = () => { 
-        fetch('https://customerrest.herokuapp.com/gettrainings',  {method: 'GET'})
-        .then(response => response.json()) 
-        .then(data => setTraining(data)) 
-        .catch(err => console.err(err)) 
-      }    
-
-
+    const [results, setResult] = useState([]);
+ 
     const groupObjects = () => {
-        const result = _(trainings)
+        const data = _(trainings)
         .groupBy('activity')
-        .map(function(items, act) {
+        .map((activities, act) => {
           return { 
             activity: act,
-            duration: _.map(items, 'duration')
+            duration: _.map(activities, 'duration')
           };
         }).value();  
-        setResult(result); 
+        setResult(data); 
     }; 
-     
+ 
     const handleClickOpen = () => {
         setOpen(true); 
         groupObjects();
     };
-            
+ 
     const handleClose = () => {
         setOpen(false);
-    };  
-
+    };
+ 
+    const getDurationSum = (duration = []) => {
+        return duration.reduce((sum, value) => sum + value, 0);
+    };
+ 
     const getActivityData = (data) => {
-        if(data.length === 0) { 
-            return chartMockData;
-        }  
-
-        data.map((activity) => { 
-            console.log(activity);
-
-
-        })
-    }
-
-    if (results && results.length > 0) { 
-        console.log(results);
-    }
-
-        return (
-                <div>  
-                    <IconButton  variant="outlined" color="primary" onClick={handleClickOpen}>
-                        <AddCircleTwoToneIcon/> Show chart
-                    </IconButton> 
-                    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        return data.reduce((acc, item) => {
+            const { activity, duration } = item;
+            const durationSum = getDurationSum(duration);
+ 
+            return [...acc, [activity, durationSum]];
+        }, [['Activity', 'Minutes']]);
+    };
+ 
+    return (
+        <>  
+            <IconButton variant="outlined" color="primary" onClick={() => handleClickOpen()}>
+                <AddCircleTwoToneIcon/> Show chart
+            </IconButton> 
+            <Dialog open={open} onClose={() => handleClose()} aria-labelledby="form-dialog-title">
+                {trainings.length > 0 ? (
                     <Chart
                         width={'500px'}
                         height={'300px'}
                         chartType="BarChart"
                         loader={<div>Loading Chart</div>}
-                        /*data={[  
-                            ['Activity', 'Minutes'], 
-                            //[results[0].activity, 10], 
-                            ["Spinning", 10],  
-                            ["Running", 20], 
-                            
-                        ]} */ 
-                        data={ !results || results.length === 0 ? 
-                            chartMockData :
-                            getActivityData(results)
-                        }
-                    
+                        data={getActivityData(results)}
                         options={{
                             title: 'Duration per activity',
                             chartArea: { width: '50%' },
@@ -108,14 +70,14 @@ const ShowChart = (props) => {
                         }}
                         // For tests
                         rootProps={{ 'data-testid': '1' }}
-                    /> 
-
-
-                    <Button onClick={handleClose} color="primary">
-                        Back
-                    </Button>
-                    </Dialog>
-                  </div>
-              )
-            } 
-            export default ShowChart;
+                    />
+                ) : <p>Loading..</p>}
+            <Button onClick={() => handleClose()} color="primary">
+                Back
+            </Button>
+            </Dialog>
+        </>
+    );
+};
+ 
+export default ShowChart;

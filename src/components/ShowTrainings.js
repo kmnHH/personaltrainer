@@ -6,42 +6,42 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded';
 import ShowExercise from './ShowExercise';
 import moment from 'moment'; 
-import SnackBar from '@material-ui/core/SnackBar'; 
-import ShowChart from './ShowChart';
+import Snackbar from '@material-ui/core/Snackbar'; 
+import ShowChart from './ShowChart'; 
+import MuiAlert from '@material-ui/lab/Alert';   
 
-function ShowTrainings() { 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+ 
+const ShowTrainings = () => {
+    const [trainings, setTrainings] = useState([]);
+    const [msg, setMsg] = useState('');
+    const [open, setOpen] = useState(false);
     
-    const [trainings, setTraining] = useState([]); 
-    const [msg, setMsg] = useState('');  
-    const [open, setOpen] = useState(false);  
-    const [customers, setCustomers] = useState([]);   
-
-    useEffect(() => { 
-        fetchTrainings();  
+    useEffect(() => {
+      if (trainings.length === 0) {
+        fetchTrainings();
+      }
      }, [trainings]);  
-    
+ 
      const fetchTrainings = () => { 
-        fetch('https://customerrest.herokuapp.com/gettrainings',  {method: 'GET'})
-        .then(response => response.json()) 
-        .then(data => setTraining(data)) 
-        .catch(err => console.err(err)) 
-      }    
-
-      const fetchCustomers = () => { 
-        fetch('https://customerrest.herokuapp.com/api/customers') 
-        .then(response => response.json()) 
-        .then(data => setCustomers(data.content)) 
-        .catch(err => console.err(err)) 
-      }     
-
+        fetch('https://customerrest.herokuapp.com/gettrainings',  { method: 'GET' })
+        .then((response) => response.json()) 
+        .then((data) => {
+          setTrainings(data)
+        })
+        .catch((err) => console.err(err));
+      };
+ 
       const openSnackBar = () => { 
         setOpen(true);
       } 
-
-      const closeSnackBar = () => { 
+ 
+      const handleClose = () => { 
         setOpen(false);
       }
-      
+     
       const columns = [ 
         { headerName : 'Date', field: 'date', cellRenderer: (data) => { return moment(data.value).format("MM/DD/YYYY HH:mm");}, sortable: true, filter: true},
         { headerName : 'Firstname', field: 'customer.firstname', sortable: true, filter: true}, 
@@ -58,15 +58,12 @@ function ShowTrainings() {
         width: 120, 
         cellRendererFramework: params => (<IconButton color="primary" 
         onClick={() => deleteExercice("https://customerrest.herokuapp.com/api/trainings/" + params.data.id)}><DeleteForeverRoundedIcon/></IconButton> )
-        
         }, 
-  
       ]  
-
+ 
       const deleteExercice = (params) => { 
         console.log(params);
         if (window.confirm('The decision is final if you delete. Do you want to continue?')) 
-        //console.log(url);
         {
             fetch(params, { method: 'DELETE' })
             .then(response => {
@@ -82,14 +79,11 @@ function ShowTrainings() {
             .catch(err => console.err(err))
           }
       }
-
-    
-
+ 
     return (
         <div> 
-            <h1>Exercises per date</h1>  
-            <ShowChart trainings={trainings} /> 
-
+            <h1>Exercises per date</h1>
+             <ShowChart trainings={trainings} />
             <div className="ag-theme-material" style={{ height: 600, width: '70%', margin: 'auto' }}>
                 <AgGridReact 
                 rowData={trainings} 
@@ -99,9 +93,14 @@ function ShowTrainings() {
                 floatingFilter={true} 
                 suppressCellSelection={true}
                 />
-            </div>  
+            </div>   
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="success">
+                {msg}
+              </Alert> 
+            </Snackbar>
         </div>
     );
 } 
-
+ 
 export default ShowTrainings;

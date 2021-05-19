@@ -11,7 +11,8 @@ import IconButton from '@material-ui/core/IconButton';
 import DirectionsRunRoundedIcon from '@material-ui/icons/DirectionsRunRounded';
 
 function ShowExercise(props) { 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false); 
+    const [name, setName] = React.useState('Name empty');
     const [exercise, setExercise] = React.useState({
     duration: '',
     activity: '',
@@ -23,12 +24,16 @@ function ShowExercise(props) {
       activity: props.exercise.activity,
     });
     setOpen(true); 
-
   }; 
 
   const handleClose = () => {
     setOpen(false);
-  };
+  }; 
+
+  //If a customer has firstname, then that name is used. If not, the name is 'Name empty'
+  const giveName = () => {
+    return (!props.exercise.customer.firstname ? name : props.exercise.customer.firstname);
+  }
 
     return (
         <div> 
@@ -37,9 +42,8 @@ function ShowExercise(props) {
             </IconButton>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title"> 
-                's Exercise summary</DialogTitle> 
-                {//{props.exercise.customer.firstname}} 
-                }
+                {giveName()}'s Exercise summary</DialogTitle> 
+               
                 <DialogContent>
                 <TextField
                         margin="dense"

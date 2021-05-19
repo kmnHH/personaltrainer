@@ -1,25 +1,15 @@
 import React from 'react';  
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle'; 
 import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone'; 
 import IconButton from '@material-ui/core/IconButton';  
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import moment from "moment";  
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import ShowExercise from './ShowExercise';
-
-
 
 
 const AddExercice = (props) => {
@@ -31,7 +21,6 @@ const AddExercice = (props) => {
     });   
     
     const handleClickOpen = () => {
-        
         setOpen(true);
       };
     
@@ -61,9 +50,6 @@ const AddExercice = (props) => {
           } 
 
       const handleSave = (newExercice) => { 
-        console.log("menin handleSave");    
-        console.log(props.customer.links[0].href);
-        console.log(newExercice);
         props.addExercice(newExercice);
         setOpen(false);
       }; 
@@ -101,7 +87,6 @@ const AddExercice = (props) => {
                         onChange={inputChanged}
                         fullWidth
                     /> 
-                    
                 </DialogContent>
                 <DialogActions> 
                     <Button onClick={handleCustomer} color="primary">
@@ -112,9 +97,7 @@ const AddExercice = (props) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-             
         </div>
-
     )
 } 
 
