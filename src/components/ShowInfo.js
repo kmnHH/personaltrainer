@@ -11,7 +11,8 @@ import IconButton from '@material-ui/core/IconButton';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 function ShowInfo(props) { 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false); 
+    const [name, setName] = React.useState('Name empty');
     const [customer, setCustomer] = React.useState({
     streetaddress: '',
     postcode: '',
@@ -20,22 +21,25 @@ function ShowInfo(props) {
     phone: '',
   }); 
 
-  
+    const handleClickOpen = () => { 
+        setCustomer({
+            streetaddress: props.customer.streetaddress,
+            postcode: props.customer.postcode,
+            city: props.customer.city,
+            email: props.customer.email,
+            phone: props.customer.phone,
+        });
+        setOpen(true);
+    }; 
 
-  const handleClickOpen = () => { 
-    setCustomer({
-      streetaddress: props.customer.streetaddress,
-      postcode: props.customer.postcode,
-      city: props.customer.city,
-      email: props.customer.email,
-      phone: props.customer.phone,
-    });
-    setOpen(true);
-  }; 
+    const handleClose = () => {
+        setOpen(false);
+    }; 
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+    //If customer has a firstname, then that name is used. If not, the name is 'Name empty'
+    const giveName = () => {
+        return (!props.customer.firstname ? name : props.customer.firstname);
+    }
 
     return (
         <div> 
@@ -43,7 +47,7 @@ function ShowInfo(props) {
                 <InfoOutlinedIcon/>
             </IconButton>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">{props.customer.firstname} `s information</DialogTitle>
+                <DialogTitle id="form-dialog-title">{giveName()} `s information</DialogTitle>
                 <DialogContent>
                     <TextField
                         margin="dense"

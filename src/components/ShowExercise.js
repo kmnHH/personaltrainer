@@ -30,7 +30,7 @@ function ShowExercise(props) {
     setOpen(false);
   }; 
 
-  //If a customer has firstname, then that name is used. If not, the name is 'Name empty'
+  //If customer has a firstname, then that name is used. If not, the name is 'Name empty'
   const giveName = () => {
     return (!props.exercise.customer.firstname ? name : props.exercise.customer.firstname);
   }

@@ -71,7 +71,7 @@ const ShowChart = ({ trainings }) => {
                         // For tests
                         rootProps={{ 'data-testid': '1' }}
                     />
-                ) : <p>Loading..</p>}
+                ) : <p>Loading...</p>}
             <Button onClick={() => handleClose()} color="primary">
                 Back
             </Button>
